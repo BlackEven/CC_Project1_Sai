@@ -18,7 +18,7 @@ Sand[] sands = new Sand[100];
 void setup() {
   size(640, 360);
   for (int i = 0; i < sands.length; i++) {
-    sands[i] = new Sand(random(8, 10), random(width), 0);
+    sands[i] = new Sand(random(2, 3), random(width), 0);
   }
 }
 
@@ -26,12 +26,29 @@ void draw() {
   background(255);
   
   for (int i = 0; i < sands.length; i++) {
-    PVector resistance = new PVector(0, -0.08);
+    //gravity
     float m = sands[i].mass;
     PVector gravity = new PVector(0, 0.1*m);
-    sands[i].applyForce(resistance);
-    sands[i].applyForce(gravity);
     
+    //fluid resistance
+    PVector v = sands[i].velocity;
+    PVector drag = v.copy();
+    //coefficient of friction
+    float c = 0.1;
+    //magnitude is coefficient * speed squared
+    float speed = v.mag();;
+    float dragMagnitude = c * speed * speed;  
+    //direction is inverse of velocity
+    drag.mult(-1);
+    //scale according to magnityde
+    drag.normalize();
+    drag.mult(dragMagnitude);
+    
+    //Apply force
+    sands[i].applyForce(gravity);
+    sands[i].applyForce(drag);
+    
+    //update and display
     sands[i].update();
     sands[i].display();
     sands[i].checkEdges();
