@@ -6,10 +6,13 @@ class Sand {
   
   //Mass 
   float mass;
-
+  
+  //radius
+  float r;
   
   Sand(float m, float x, float y) {
     mass = m;
+    r = 2;
     location = new PVector(x, y);
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
@@ -37,7 +40,7 @@ class Sand {
   void display() {
     noStroke();
     fill(100);
-    ellipse(location.x, location.y, 2, 2);
+    ellipse(location.x, location.y, r, r);
   }
   
   //Bounce off boundary of window
@@ -56,6 +59,14 @@ class Sand {
       // A little dampening when hitting the bottom
       velocity.y *= -0.6;
       location.y = height;
+    }
+  }
+  
+  void checkInteract(Sand s) {
+    float d = PVector.dist(location, s.location);
+    //interact
+    if (d < 4) {
+    //do something???
     }
   }
 }
