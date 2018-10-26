@@ -10,6 +10,9 @@ class Sand {
   //radius
   float r;
   
+  //crush
+  boolean crashing = false;
+  
   Sand(float m, float x, float y) {
     mass = m;
     r = 2;
@@ -62,11 +65,4 @@ class Sand {
     }
   }
   
-  void checkInteract(Sand s) {
-    float d = PVector.dist(location, s.location);
-    //interact
-    if (d < 4) {
-    //do something???
-    }
-  }
 }
