@@ -14,7 +14,8 @@ Part 2. Sands fall down to create different mountains, valleys and dunes.
  */
 
 ArrayList<Sand> sands;
-
+int protection = 0;
+  
 void setup() {
   size(640, 360);
   sands = new ArrayList<Sand>();
@@ -22,22 +23,14 @@ void setup() {
 
 void draw() {
   background(255);
-  int total = 1;
-  int count = 0;
-  int attempts = 0;
 
-  while (count < total) { 
+  //use a variable to prevent from generating too much sands
+  if (protection < 500) {
     Sand newS = newSand();
     if (newS != null) {
       sands.add(newS);
-      count++;
-    }
-    attempts++;
-    if (attempts > 1000) {
-      noLoop();
-      println("Finished");
-      break;
-    }
+      protection++;
+  }
   }
 
   for (Sand s : sands) {
@@ -52,7 +45,7 @@ void draw() {
     float c = 0.1;
     //magnitude is coefficient * speed squared
     float speed = v.mag();
-    ;
+    
     float dragMagnitude = c * speed * speed;  
     //direction is inverse of velocity
     drag.mult(-1);
@@ -62,47 +55,45 @@ void draw() {
 
     //normal force and friction from other sands
     PVector normal = new PVector();
-    //PVector friction = new PVector();
-
-    //update and display
+    
+    //check crushing
     for (Sand other : sands) {
-      if (s != other) {
+      if (s != other && s.life > 0) {
         float d = dist(s.location.x, s.location.y, other.location.x, other.location.y);
-        if (d - 2 <= s.r + other.r) {
+        if (d <= s.r + other.r) {
           s.crashing = true;
-          //apply normal force
+          //calculate normal force
           normal = PVector.sub(s.location, other.location);
           normal.normalize();
-          normal.mult(0.3);
-
-          //how to calculate friction to stop it??
-          //friction = v.copy();
-          //friction.mult(-1);
-          //friction.normalize();
-          //friction.mult(0.2);
-          //;
+          normal.mult(0.7);
+          s.life-=1;
         }
       }
     }
 
     //Apply force
+    if (s.life > 1) {
     s.applyForce(gravity);
     s.applyForce(drag);
     if (s.crashing) {
       s.applyForce(normal);
-      //s.applyForce(friction);
     }
-
+    }
+    
+    //update and display
     s.update();
     s.display();
     s.checkEdges();
+    s.life();
+    
+
   }
 }
 
 Sand newSand() {
-  float x = random(width);
+  float x = random(width/2 - 10, width/2 + 10);
   float y = 0;
-  float m = random(8, 10);
+  float m = 2;
 
   boolean valid = true;
   for (Sand s : sands) {

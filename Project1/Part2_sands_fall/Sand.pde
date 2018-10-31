@@ -10,12 +10,20 @@ class Sand {
   //radius
   float r;
   
+  //life
+  float life;
+  
+  //color
+  color c;
+  
   //crush
   boolean crashing = false;
   
   Sand(float m, float x, float y) {
     mass = m;
-    r = 2;
+    r = 10;
+    life = 300;
+    c = color(random(255),0,0);
     location = new PVector(x, y);
     velocity = new PVector(0, 0);
     acceleration = new PVector(0, 0);
@@ -42,26 +50,46 @@ class Sand {
   //draw sand
   void display() {
     noStroke();
-    fill(100);
-    ellipse(location.x, location.y, r, r);
+    fill(c);
+    ellipse(location.x, location.y, r*2, r*2);
   }
   
   //Bounce off boundary of window
   void checkEdges() {
     //hit right side
-    if (location.x > width) {
-      location.x = width;
-      velocity.x *= -0.6;
+    if (location.x > width - r) {
+      if (life > 1) {
+      location.x = width - r;
+      velocity.x *= -0.7;
+      }else {
+        location.x = width - r;
+      }
     //hit left side
-    }else if (location.x < 0) {
-      location.x = 0;
-      velocity.x *= -0.6;
+    }else if (location.x < r) {
+      if (life > 1) {
+      location.x = r;
+      velocity.x *= -0.7;
+      }else {
+        location.x = r;
+      }
     }
     //hit buttom
-    if (location.y > height) {
+    if (location.y > height - r) {
+      if (life > 1) {
       // A little dampening when hitting the bottom
-      velocity.y *= -0.6;
-      location.y = height;
+      velocity.y *= -0.7;
+      location.y = height - r;
+      velocity.x *= -0.7;
+    }else {
+      location.y = height - r;
+    }
+    }
+  }
+  
+  void life() {
+    if (life <= 1) {
+      acceleration.mult(0);
+      velocity.mult(0);
     }
   }
   
