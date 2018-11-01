@@ -19,7 +19,7 @@ class Sand {
   Sand[] others;
 
   Sand(float x, float y, int id_, Sand[] others_) {
-    mass = 3;
+    mass = random(3,5);
     r = 3;
     id = id_;
     others = others_;
@@ -46,7 +46,7 @@ class Sand {
     //clear acceleration each frame
     acceleration.mult(0);
 
-    if (velocity.mag() < 0.2) {
+    if (velocity.mag() < 0.1) {
       velocity.set(0, 0);
     }
   }
