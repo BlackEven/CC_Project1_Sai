@@ -9,7 +9,8 @@ class Sand {
 
   //radius
   float r;
-
+  
+  //id
   int id;  
 
   //color
@@ -17,7 +18,8 @@ class Sand {
 
   //other sand
   Sand[] others;
-
+  
+  //constructor
   Sand(float x, float y, int id_, Sand[] others_) {
     mass = random(3,5);
     r = 3;
@@ -45,7 +47,9 @@ class Sand {
     location.add(velocity);
     //clear acceleration each frame
     acceleration.mult(0);
-
+    
+    //set the velocity to 0 while the velocity is very small
+    //so the sands can pile up as a mountain
     if (velocity.mag() < 0.1) {
       velocity.set(0, 0);
     }
@@ -55,6 +59,7 @@ class Sand {
   void display() {
     noStroke();
     fill(c);
+    //change the location of sands when we filp over the window
     if(flip) {
     ellipse(location.x, height-location.y, r*2, r*2);
     }else {
@@ -91,10 +96,13 @@ class Sand {
   }
 
   void collide() {
-
     for (int i = id + 1; i < numSands; i++) {
+      //calculate the distance between the sand and other sands 
       float d = dist(location.x, location.y, others[i].location.x, others[i].location.y);
+      //calculate the minimum distance that could prevent two sands from overlapping
       float minDist = others[i].r + r;
+      //if the distance is less than mininum distance, add opposite acceleration 
+      //to their velocity so that they won't overlap
       if (d < minDist) {
         PVector distanceVect = PVector.sub(others[i].location, location);
         float angle = distanceVect.heading();
