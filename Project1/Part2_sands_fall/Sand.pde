@@ -55,7 +55,11 @@ class Sand {
   void display() {
     noStroke();
     fill(c);
+    if(flip) {
+    ellipse(location.x, height-location.y, r*2, r*2);
+    }else {
     ellipse(location.x, location.y, r*2, r*2);
+    }
   }
 
   //Bounce off boundary of window
@@ -76,6 +80,12 @@ class Sand {
 
       velocity.y *= -0.7;
       location.y = height - r;
+      velocity.x *= -0.4;
+    }
+    //hit top
+    if (location.y < r) {
+      velocity.y *= -0.7;
+      location.y =  r;
       velocity.x *= -0.4;
     }
   }

@@ -1,26 +1,32 @@
 
-int numSands = 2000;
+int numSands = 1000;
 Sand[] sands = new Sand[numSands];
 boolean clean = false;
+boolean flip = false;
 
 void setup() {
   //fullScreen();
   size(640, 320);
   for (int i = 0; i < numSands; i++) {
-    sands[i] = new Sand (random(width/2 - 50, width/2 + 50), 0, i, sands);
+    sands[i] = new Sand (random(width/2 - 30, width/2 + 30), 0, i, sands);
   }
 }
 
 void draw() {
-  colorMode(RGB,255);
+  colorMode(RGB, 255);
   background(255);
-
+  
+  stroke(0);
+  line(0,height/2, width, height/2);
   //for (Sand s : sands) {
-    for (int i = 0; i < numSands; i++) {
+  for (int i = 0; i < numSands; i++) {
 
     //gravity
     float m = sands[i].mass;
     PVector gravity = new PVector(0, 0.1*m);
+    if (flip) {
+    gravity.mult(-1);
+    }
 
     //fluid resistance
     PVector v = sands[i].velocity;
@@ -48,15 +54,14 @@ void draw() {
     sands[i].checkEdges();
     sands[i].collide();
     sands[i].display();
-    
+
     if (clean) {
-    clear();
-    background(255);
-    sands[i].location.y = random(mouseY - 100, mouseY + 100);
+      clear();
+      background(255);
+      sands[i].location.y = random(mouseY - 100, mouseY + 100);
       sands[i].location.x = random(mouseX - 100, mouseX + 100);
+    }
   }
-  }
- 
 }
 
 void keyPressed() {
@@ -64,4 +69,7 @@ void keyPressed() {
     clean = !clean;
   }
 }
-    
+
+void mousePressed() {
+  flip = !flip;
+}
