@@ -18,11 +18,19 @@ void setup() {
 
 void draw() {
   colorMode(RGB, 255);
-  background(255);
+  background(0);
   
   //the line is used to test if the window does flip over
-  stroke(0);
-  line(0,height/2, width, height/2);
+  noStroke();
+  fill(200,100,200,100);
+  float h;
+  if(flip) {
+  h = 40;
+  }else {
+  h = -40;
+  }
+  //line(0,height/2, width, height/2);
+  triangle(width/2-40, height/2, width/2, height/2 + h, width/2+40, height/2);
   
   for (int i = 0; i < numSands; i++) {
     //gravity
@@ -61,7 +69,7 @@ void draw() {
     //from where the mouse is
     if (clean) {
       clear();
-      background(255);
+      background(0);
       sands[i].location.y = random(mouseY - 100, mouseY + 100);
       sands[i].location.x = random(mouseX - 100, mouseX + 100);
     }
